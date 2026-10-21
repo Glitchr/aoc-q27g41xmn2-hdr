@@ -1,8 +1,8 @@
-# AocHdr
+# AOC Q27G41XMN HDR sync
 
 Switch Windows HDR and the **AOC Q27G41XMN** monitor's own HDR setting together, from a double-click or a hotkey.
 
-The Q27G41XMN has an HDR mode in its on-screen menu (Picture > HDR) that Windows does not control. Turning HDR on or off in Windows leaves that setting where it was, so every switch also means a trip through the monitor's menu. AocHdr does both halves in one step: it flips Windows HDR for this monitor only and sets the OSD option over DDC/CI.
+The Q27G41XMN has an HDR mode in its on-screen menu (Picture > HDR) that Windows does not control. Turning HDR on or off in Windows leaves that setting where it was, so every switch also means a trip through the monitor's menu. This tool does both halves in one step: it flips Windows HDR for this monitor only and sets the OSD option over DDC/CI.
 
 ## Requirements
 
@@ -33,11 +33,11 @@ Double-click one of the batch files:
 
 Other displays are never touched. If something fails, the window stays open with the error.
 
-From a terminal, the same actions are available on `AocHdr.ps1`:
+From a terminal, the same actions are available on `hdr.ps1`:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\AocHdr.ps1 toggle
-powershell -ExecutionPolicy Bypass -File .\AocHdr.ps1 on -OsdHdrValue 4
+powershell -ExecutionPolicy Bypass -File .\hdr.ps1 toggle
+powershell -ExecutionPolicy Bypass -File .\hdr.ps1 on -OsdHdrValue 4
 ```
 
 | Parameter | Default | Meaning |
@@ -62,13 +62,13 @@ Shortcut hotkeys only work for shortcuts on the Desktop or in the Start menu. To
 
 ### Win+Alt+B
 
-The Windows shortcut **Win+Alt+B** (from Xbox Game Bar) toggles HDR without going through AocHdr, so the OSD is left behind. Run `hdr-sync.bat` afterwards to fix it, or use the AocHdr hotkey instead.
+The Windows shortcut **Win+Alt+B** (from Xbox Game Bar) toggles HDR without going through this tool, so the OSD is left behind. Run `hdr-sync.bat` afterwards to fix it, or use the [hotkey](#hotkey) above instead.
 
 ## How it works
 
 **Windows side.** `DisplayConfigGetDeviceInfo` reads the advanced color state of the display whose friendly name matches `-MonitorMatch`, and `DisplayConfigSetDeviceInfo` (`DISPLAYCONFIG_DEVICE_INFO_SET_ADVANCED_COLOR_STATE`) switches HDR on that display alone.
 
-**Monitor side.** Picture > HDR is not a standard MCCS VCP code. AOC exposes it as extended feature `F8`, tag `E1`, sub-id `0x52`, which the standard Windows monitor API (`dxva2` `GetVCPFeature`/`SetVCPFeature`) cannot address. AocHdr builds the DDC/CI frames itself and sends them with `ADL2_Display_DDCBlockAccess_Get`.
+**Monitor side.** Picture > HDR is not a standard MCCS VCP code. AOC exposes it as extended feature `F8`, tag `E1`, sub-id `0x52`, which the standard Windows monitor API (`dxva2` `GetVCPFeature`/`SetVCPFeature`) cannot address. The script builds the DDC/CI frames itself and sends them with `ADL2_Display_DDCBlockAccess_Get`.
 
 After a Windows HDR switch the monitor re-syncs and ignores DDC/CI for a few seconds. The script retries the write and reads the value back until it sticks, for up to 12 seconds.
 
@@ -84,7 +84,7 @@ Picture > HDR values (sub-id `0x52`), confirmed by changing the OSD by hand and 
 | 3 | HDR Movie |
 | 4 | HDR Game |
 
-Frames as passed to ADL. For the frames AocHdr sends, the checksum is the XOR of every preceding byte, including the leading `6E`:
+Frames as passed to ADL. For the frames the script sends, the checksum is the XOR of every preceding byte, including the leading `6E`:
 
 ```
 get:    6E 51 84 01 F8 E1 52 chk
@@ -106,7 +106,7 @@ These answered on the same unit (read only, never written by this tool): `0x12` 
 
 ## Other monitors
 
-AocHdr has been tested on one Q27G41XMN with a Radeon RX 6700 XT. Other AOC models may share the `F8`/`E1` scheme with a different sub-id. To check, look for `F8E1` entries in the monitor's capabilities string, then read candidate sub-ids while changing the OSD by hand. Writing to an unknown sub-id can change settings you did not intend to change, so map it with reads first.
+This tool has been tested on one Q27G41XMN with a Radeon RX 6700 XT. Other AOC models may share the `F8`/`E1` scheme with a different sub-id. To check, look for `F8E1` entries in the monitor's capabilities string, then read candidate sub-ids while changing the OSD by hand. Writing to an unknown sub-id can change settings you did not intend to change, so map it with reads first.
 
 The script only ever writes sub-id `0x52`, and only the values 0 to 4.
 
