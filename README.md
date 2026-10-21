@@ -1,12 +1,12 @@
-# AOC Q27G41XMN HDR sync
+# AOC Q27G41XMN2 HDR sync
 
-Switch Windows HDR and the **AOC Q27G41XMN** monitor's own HDR setting together, from a double-click or a hotkey.
+Switch Windows HDR and the **AOC Q27G41XMN2** monitor's own HDR setting together, from a double-click or a hotkey.
 
-The Q27G41XMN has an HDR mode in its on-screen menu (Picture > HDR) that Windows does not control. Turning HDR on or off in Windows leaves that setting where it was, so every switch also means a trip through the monitor's menu. This tool does both halves in one step: it flips Windows HDR for this monitor only and sets the OSD option over DDC/CI.
+The Q27G41XMN2 has an HDR mode in its on-screen menu (Picture > HDR) that Windows does not control. Turning HDR on or off in Windows leaves that setting where it was, so every switch also means a trip through the monitor's menu. This tool does both halves in one step: it flips Windows HDR for this monitor only and sets the OSD option over DDC/CI.
 
 ## Requirements
 
-- **AOC Q27G41XMN.** The OSD register this tool writes is undocumented and was mapped on this model. Other AOC models may use a different register or none at all; see [Other monitors](#other-monitors).
+- **AOC Q27G41XMN2.** The OSD register this tool writes is undocumented and was mapped on this model. Other AOC models may use a different register or none at all; see [Other monitors](#other-monitors).
 - **AMD Radeon GPU** with the AMD driver installed, and the monitor connected to it. The DDC/CI half goes through AMD's ADL library (`atiadlxx.dll`), so NVIDIA and Intel GPUs are not supported.
 - **DDC/CI turned on** in the monitor's OSD.
 - **Windows 11, 64-bit**, with the built-in Windows PowerShell 5.1. Windows 10 may work but has not been tested. No modules or installs are needed.
@@ -106,7 +106,7 @@ These answered on the same unit (read only, never written by this tool): `0x12` 
 
 ## Other monitors
 
-This tool has been tested on one Q27G41XMN with a Radeon RX 6700 XT. Other AOC models may share the `F8`/`E1` scheme with a different sub-id. To check, look for `F8E1` entries in the monitor's capabilities string, then read candidate sub-ids while changing the OSD by hand. Writing to an unknown sub-id can change settings you did not intend to change, so map it with reads first.
+This tool has been tested on one Q27G41XMN2 with a Radeon RX 6700 XT. Other AOC models may share the `F8`/`E1` scheme with a different sub-id. To check, look for `F8E1` entries in the monitor's capabilities string, then read candidate sub-ids while changing the OSD by hand. Writing to an unknown sub-id can change settings you did not intend to change, so map it with reads first.
 
 The script only ever writes sub-id `0x52`, and only the values 0 to 4.
 

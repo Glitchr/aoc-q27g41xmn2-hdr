@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-  Toggle Windows HDR on the AOC Q27G41XMN and keep its OSD "Picture > HDR" in step.
+  Toggle Windows HDR on the AOC Q27G41XMN2 and keep its OSD "Picture > HDR" in step.
 
   on     : Windows HDR ON for the AOC target only, then OSD Picture>HDR = DisplayHDR
   off    : OSD Picture>HDR = Off first, then Windows HDR OFF for the AOC target only
