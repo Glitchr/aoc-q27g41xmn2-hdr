@@ -16,7 +16,7 @@ The Q27G41XMN2 has an HDR mode in its on-screen menu (Picture > HDR) that Window
 Clone or download this repository to any folder. There is nothing to install; the scripts find each other relative to their own location.
 
 ```
-git clone https://github.com/Glitchr/aoc-q27g41xmn-hdr.git
+git clone https://github.com/Glitchr/aoc-q27g41xmn2-hdr.git
 ```
 
 ## Usage
