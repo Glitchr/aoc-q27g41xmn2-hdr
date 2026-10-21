@@ -15,7 +15,7 @@
 param(
   [Parameter(Position=0)][ValidateSet('on','off','toggle','sync','status')][string]$Action = 'toggle',
   [string]$MonitorMatch = 'Q27G41*',
-  [int]$OsdHdrValue = 1          # value written when HDR is on: 1 = DisplayHDR
+  [ValidateRange(1,4)][int]$OsdHdrValue = 1   # value written when HDR is on: 1 = DisplayHDR
 )
 $ErrorActionPreference = 'Stop'
 if (-not [Environment]::Is64BitProcess) { throw 'Run from 64-bit PowerShell (atiadlxx.dll is 64-bit).' }
